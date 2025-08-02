@@ -23,6 +23,8 @@ public:
 
     // ------------------------------------------------------------------
     juce::Font getSilkscreenFont(float height);
+    juce::Font getRandomCursedFont(float height);
+    juce::Font getForumFont(float height);  // Different cursed font each time
 
     void drawRotarySlider(juce::Graphics&, int x, int y, int w, int h,
         float sliderPos, float rotaryStart, float rotaryEnd,
@@ -36,6 +38,11 @@ public:
 
     void fillTextEditorBackground(juce::Graphics&, int w, int h,
         juce::TextEditor&) override;
+        
+    // Cursed slider behaviors (Gemini's ideas)
+    void drawLinearSlider(juce::Graphics&, int x, int y, int w, int h,
+        float sliderPos, float minSliderPos, float maxSliderPos,
+        const juce::Slider::SliderStyle, juce::Slider&) override;
 
 private:
     juce::Typeface::Ptr silkscreenTypeface;

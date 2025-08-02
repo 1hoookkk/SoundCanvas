@@ -4,7 +4,7 @@
 #include <JuceHeader.h>
 #include "Core/Commands.h"
 #include "Core/ForgeProcessor.h"
-#include "Core/CanvasProcessor.h"
+#include "Core/PaintEngine.h"
 #include "Core/ParameterBridge.h"
 
 class ARTEFACTAudioProcessor : public juce::AudioProcessor,
@@ -40,13 +40,17 @@ public:
     bool pushCommandToQueue(const Command& newCommand);
 
     void parameterChanged(const juce::String&, float) override;
+    
+    // Accessors for GUI
+    ForgeProcessor& getForgeProcessor() { return forgeProcessor; }
+    PaintEngine& getPaintEngine() { return paintEngine; }
 
 private:
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     juce::AudioProcessorValueTreeState apvts;
 
     ForgeProcessor  forgeProcessor;
-    CanvasProcessor canvasProcessor;
+    PaintEngine paintEngine;
     ParameterBridge parameterBridge;
 
     enum class ProcessingMode { Forge = 0, Canvas, Hybrid };
@@ -56,6 +60,8 @@ private:
     juce::AbstractFifo             abstractFifo{ fifoSize };
     std::array<Command, fifoSize>  commandFIFO;
     void processNextCommand();
+    void processForgeCommand(const Command& cmd);
+    void processPaintCommand(const Command& cmd);
 
     double lastKnownBPM = 120.0;
     double currentSampleRate = 44100.0;
